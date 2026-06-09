@@ -1,0 +1,38 @@
+# ==========================================
+# Core API & Server
+# ==========================================
+fastapi>=0.115.0
+uvicorn>=0.34.0
+pydantic>=2.9.2
+pydantic-settings>=2.0.0
+python-multipart>=0.0.9  # Required for FastAPI file uploads
+python-dotenv>=1.0.0
+
+# ==========================================
+# Agentic RAG Engine (LangChain & LangGraph)
+# ==========================================
+langchain>=0.2.0
+langchain-core>=0.2.0
+langgraph>=0.1.0
+
+# LLM Providers (Loosely coupled, install what you use)
+langchain-groq>=0.1.0
+langchain-anthropic>=0.1.0
+langchain-community>=0.2.0  # Required for Local Ollama integration
+
+# ==========================================
+# Document Processing & Text Extraction
+# ==========================================
+PyPDF2>=3.0.1
+pdfplumber>=0.11.6
+pymupdf>=1.26.0
+# pytesseract>=0.3.13  # Uncomment if OCR is strictly needed
+# pillow>=11.0.0
+
+# ==========================================
+# Vector Stores & Embeddings
+# ==========================================
+sentence-transformers>=3.0.0  # Handles local embeddings
+chromadb>=0.5.0
+faiss-cpu>=1.8.0
+# qdrant-client>=1.9.0 # Uncomment if you prefer Qdrant over Chroma

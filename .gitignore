@@ -1,0 +1,35 @@
+# Environments
+.env
+.env.local
+venv/
+venv-*/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Data and Artifacts (Don't commit large vector DBs or raw PDFs)
+data/
+*.log
+archive/
+demo_pdfs/
+images/
+
+# OS
+.DS_Store
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# IDEs
+.vscode/
+.idea/
+.gemini/
+
+AGENTS.md

@@ -1,0 +1,37 @@
+# RAG System Advanced Configuration
+# Note: Most core backend settings are now managed via Pydantic BaseSettings in `backend/app/config.py` and `.env`.
+# This file is retained to provide advanced tuning parameters for the legacy data_processing and chunking services.
+
+processing:
+  text_extraction:
+    preserve_layout: true
+    extract_images: false
+    ocr_enabled: false
+    ocr_language: "eng"
+  
+  table_extraction:
+    method: "pdfplumber"
+    table_areas: null
+    edge_tolerance: 50
+  
+  image_processing:
+    extract_images: false
+    ocr_images: false
+
+chunking:
+  method: "semantic"
+  chunk_size: 1000
+  chunk_overlap: 200
+  sentence_splitter: "spacy"
+  similarity_threshold: 0.5
+  min_chunk_size: 100
+  max_chunk_size: 2000
+
+embeddings:
+  model_name: "sentence-transformers/all-MiniLM-L6-v2"
+  batch_size: 32
+
+vector_stores:
+  chromadb:
+    storage_path: "./data/chroma_db"
+    collection_name: "document_chunks"
