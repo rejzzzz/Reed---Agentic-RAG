@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -9,11 +9,14 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+export const viewport: Viewport = {
+  themeColor: '#0d0d0d',
+}
+
 export const metadata: Metadata = {
   title: 'Reed — Agentic RAG',
   description: 'Intelligent document retrieval and generation powered by Agentic RAG.',
   keywords: ['RAG', 'AI', 'document intelligence', 'LLM', 'knowledge base'],
-  themeColor: '#0d0d0d',
 }
 
 export default function RootLayout({
