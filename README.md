@@ -39,12 +39,16 @@ graph TD
 
 ```bash
 cd backend
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+python -m venv venv
+# Windows: venv\Scripts\activate
+# Mac/Linux: source venv/bin/activate
 
-# Install dependencies
 pip install -r requirements.txt
+```
 
+> **Note for Windows Users**: To enable PDF Image OCR, download and install [Tesseract OCR](https://github.com/UB-Mannheim/tesseract/wiki) to its default directory (`C:\Program Files\Tesseract-OCR\`).
+
+```bash
 # Set up environment variables
 cp .env.template .env
 # Edit .env and add your GROQ_API_KEY
