@@ -20,7 +20,7 @@ graph TD
     User([User]) --> |Queries| UI[Next.js Frontend]
     UI --> |/chat/stream| API[FastAPI Backend]
     
-    subgraph Agentic RAG [LangGraph Workflow]
+    subgraph AgenticRAG [LangGraph Workflow]
         A(Retrieve) --> B(Rerank with BM25)
         B --> C(Grade Documents)
         C -->|Relevant| D(Generate)
@@ -28,7 +28,7 @@ graph TD
         E -->|Search Context| D
     end
     
-    API --> Agentic RAG
+    API --> AgenticRAG
     A --> ChromaDB[(ChromaDB)]
     D --> |Streaming Response| UI
 ```

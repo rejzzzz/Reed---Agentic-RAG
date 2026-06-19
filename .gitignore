@@ -35,7 +35,6 @@ data/
 *.log
 archive/
 demo_pdfs/
-images/
 
 # OS
 .DS_Store
