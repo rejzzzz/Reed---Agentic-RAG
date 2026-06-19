@@ -4,6 +4,7 @@ from .state import GraphState
 from ..config import settings
 from ..services.vector_stores.db_manager import VectorDatabaseManager
 from ..services.llm.factory import LLMFactory
+from ..services.reranking.reranker import BM25Reranker
 from sentence_transformers import SentenceTransformer
 
 logger = logging.getLogger(__name__)
@@ -33,7 +34,13 @@ def retrieve(state: GraphState) -> Dict[str, Any]:
     
     try:
         query_vector = get_embedder().encode(question)
-        results, _ = get_db().search(query_vector=query_vector, top_k=3, index_type="auto")
+        
+        metadata_filter = None
+        document_filter = state.get("document_filter")
+        if document_filter:
+            metadata_filter = {"source_document": document_filter}
+            
+        results, _ = get_db().search(query_vector=query_vector, top_k=3, index_type="auto", metadata_filter=metadata_filter)
         documents = [res.get("text", "") for res in results]
     except Exception as e:
         logger.error(f"Retrieval error: {e}")
@@ -43,7 +50,38 @@ def retrieve(state: GraphState) -> Dict[str, Any]:
         "documents": documents, 
         "question": question, 
         "relevant_documents": [], 
-        "provider": state.get("provider")
+        "provider": state.get("provider"),
+        "document_filter": state.get("document_filter")
+    }
+
+def rerank_documents(state: GraphState) -> Dict[str, Any]:
+    """
+    Rerank documents using BM25 to prioritize the most relevant chunks.
+    """
+    logger.info("---RERANK DOCUMENTS---")
+    question = state["question"]
+    documents = state["documents"]
+    
+    if not settings.RERANK_ENABLED or not documents:
+        return state
+        
+    try:
+        reranker = BM25Reranker()
+        reranker.fit(documents)
+        
+        # We don't have metadata available here right now, so we rerank just texts
+        # Since reranker expects Dicts with 'text', we wrap them
+        docs_to_rerank = [{"text": d} for d in documents]
+        results = reranker.rerank(question, docs_to_rerank, top_k=len(documents))
+        
+        reranked_docs = [res["text"] for res in results]
+    except Exception as e:
+        logger.error(f"Reranking error: {e}")
+        reranked_docs = documents
+        
+    return {
+        **state,
+        "documents": reranked_docs
     }
 
 def grade_documents(state: GraphState) -> Dict[str, Any]:
@@ -91,7 +129,7 @@ def grade_documents(state: GraphState) -> Dict[str, Any]:
         "provider": provider
     }
 
-def generate(state: GraphState) -> Dict[str, Any]:
+async def generate(state: GraphState) -> Dict[str, Any]:
     """
     Generate answer using RAG based ONLY on relevant documents.
     """
@@ -121,7 +159,7 @@ def generate(state: GraphState) -> Dict[str, Any]:
     """
     
     try:
-        response = llm.invoke(prompt)
+        response = await llm.ainvoke(prompt)
         generation = response.content
     except Exception as e:
         logger.error(f"Generation error: {e}")

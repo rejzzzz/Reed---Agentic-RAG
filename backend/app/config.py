@@ -23,14 +23,22 @@ class Settings(BaseSettings):
     SPACY_MODEL: str = "en_core_web_sm"
     PROCESSED_DATA_DIR: str = "./data/processed"
     
+    # Reranking
+    RERANK_ENABLED: bool = True
+    RERANK_METHOD: str = "bm25"
+    
+    # Web Search
+    WEB_SEARCH_ENABLED: bool = True
+    
     # LLM Provider
-    LLM_PROVIDER: str = "groq" # groq, anthropic, ollama, aws
+    LLM_PROVIDER: str = "groq" # groq, anthropic, ollama, aws, gemini
     
     # Provider specifics
     ANTHROPIC_MODEL: str = "claude-3-haiku-20240307"
     AWS_BEDROCK_MODEL: str = "anthropic.claude-3-haiku-20240307-v1:0"
-    GROQ_MODEL: str = "llama3-8b-8192"
+    GROQ_MODEL: str = "llama-3.1-8b-instant"
     OLLAMA_MODEL: str = "llama3"
+    GEMINI_MODEL: str = "gemini-1.5-flash"
     OLLAMA_BASE_URL: str = "http://localhost:11434"
     LLM_TEMPERATURE: float = 0.0
     

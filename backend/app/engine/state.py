@@ -9,3 +9,4 @@ class GraphState(TypedDict):
     relevant_documents: List[str] # Filtered documents after grading
     generation: str
     provider: Optional[str]       # Which LLM provider to use
+    document_filter: Optional[str] # Document to filter retrieval by

@@ -10,8 +10,9 @@ from typing import List, Dict, Any, Tuple
 import fitz  # PyMuPDF
 import PyPDF2
 import pdfplumber
-import pytesseract
-from PIL import Image
+# Optional OCR imports deferred
+# import pytesseract
+# from PIL import Image
 import io
 import json
 from dataclasses import dataclass
@@ -241,6 +242,7 @@ class MultimodalPDFProcessor:
                 xref = img[0]
                 base_image = page.parent.extract_image(xref)
                 image_bytes = base_image["image"]
+                from PIL import Image # Deferred import
                 image = Image.open(io.BytesIO(image_bytes))
                 
                 # Check minimum size
@@ -258,7 +260,20 @@ class MultimodalPDFProcessor:
                 ocr_text = ""
                 if self.image_config.get('ocr_images', False):
                     try:
+                        import pytesseract
+                        from PIL import Image
+                        import sys
+                        import os
+                        
+                        # Add a fallback for default Windows installation path
+                        if sys.platform == 'win32':
+                            default_path = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+                            if os.path.exists(default_path):
+                                pytesseract.pytesseract.tesseract_cmd = default_path
+                                
                         ocr_text = pytesseract.image_to_string(image)
+                    except ImportError:
+                        logger.warning(f"OCR requested but pytesseract/PIL not installed.")
                     except Exception as e:
                         logger.warning(f"OCR failed for image {img_index} on page {page_number}: {e}")
                 

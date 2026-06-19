@@ -14,7 +14,6 @@ export default function ReedApp() {
   const [activeView, setActiveView] = useState<ActiveView>('chat')
   const [isOnline, setIsOnline] = useState<boolean | null>(null)
   const [providers, setProviders] = useState<string[]>([])
-  const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
   const [isCheckingHealth, setIsCheckingHealth] = useState(false)
 
   const doHealthCheck = useCallback(async () => {
@@ -44,7 +43,7 @@ export default function ReedApp() {
   }, [doHealthCheck, loadProviders])
 
   const handleUploadSuccess = (filename: string) => {
-    setUploadedFiles((prev) => [...prev, filename])
+    // Optionally trigger a refresh or notification
   }
 
   return (
@@ -53,7 +52,6 @@ export default function ReedApp() {
         activeView={activeView}
         onViewChange={setActiveView}
         isOnline={isOnline}
-        uploadCount={uploadedFiles.length}
       />
 
       <main className="flex-1 min-w-0 overflow-hidden">
@@ -64,7 +62,7 @@ export default function ReedApp() {
           <UploadView onUploadSuccess={handleUploadSuccess} />
         )}
         {activeView === 'library' && (
-          <LibraryView uploadedFiles={uploadedFiles} onViewChange={setActiveView} />
+          <LibraryView onViewChange={setActiveView} />
         )}
         {activeView === 'settings' && (
           <SettingsView

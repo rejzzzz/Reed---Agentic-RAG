@@ -1,3 +1,7 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -30,6 +34,13 @@ app.include_router(chat_router, prefix="/api/v1")
 class HealthResponse(BaseModel):
     status: str
     message: str
+
+@app.get("/", tags=["System"])
+async def root():
+    """
+    Root endpoint.
+    """
+    return {"message": "Welcome to the Agentic RAG System API. Visit /docs for the API documentation."}
 
 @app.get("/health", response_model=HealthResponse, tags=["System"])
 async def health_check():

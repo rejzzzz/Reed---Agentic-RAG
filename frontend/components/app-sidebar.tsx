@@ -11,7 +11,6 @@ interface AppSidebarProps {
   activeView: ActiveView
   onViewChange: (view: ActiveView) => void
   isOnline: boolean | null
-  uploadCount: number
 }
 
 const navItems = [
@@ -21,7 +20,7 @@ const navItems = [
   { id: 'settings' as ActiveView, label: 'Settings', icon: Settings },
 ]
 
-export function AppSidebar({ activeView, onViewChange, isOnline, uploadCount }: AppSidebarProps) {
+export function AppSidebar({ activeView, onViewChange, isOnline }: AppSidebarProps) {
   return (
     <aside className="flex flex-col w-14 lg:w-56 shrink-0 border-r border-border bg-sidebar h-screen sticky top-0">
       {/* Logo */}
@@ -49,14 +48,6 @@ export function AppSidebar({ activeView, onViewChange, isOnline, uploadCount }: 
             >
               <Icon className="size-4 shrink-0" />
               <span className="hidden lg:block">{label}</span>
-              {id === 'library' && uploadCount > 0 && (
-                <Badge
-                  variant="secondary"
-                  className="hidden lg:flex ml-auto text-[10px] px-1.5 py-0 h-4 bg-primary/20 text-primary border-0"
-                >
-                  {uploadCount}
-                </Badge>
-              )}
               {activeView === id && (
                 <ChevronRight className="hidden lg:block ml-auto size-3 text-muted-foreground" />
               )}
